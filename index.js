@@ -1,3 +1,11 @@
-import { AppRegistry } from 'react-native';
-import App from './App';
-AppRegistry.registerComponent('abbealexpenses', () => App);
+import { Navigation } from 'react-native-navigation';
+import { registerScreens } from './screens';
+
+registerScreens();
+
+Navigation.startSingleScreenApp({
+  screen: {
+    screen: 'SignInScreen',
+    title: 'Abbeal Expenses',
+  },
+});

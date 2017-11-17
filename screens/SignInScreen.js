@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
-import Config from './config';
+import Config from '../config';
 
 const styles = StyleSheet.create({
   container: {
