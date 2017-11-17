@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
+import Config from './config';
 
 const styles = StyleSheet.create({
   container: {
@@ -38,8 +39,8 @@ export default class App extends React.Component {
     try {
       await GoogleSignin.hasPlayServices({ autoResolve: true });
       await GoogleSignin.configure({
-        iosClientId: '359919861567-vfiji06sornpbcg4uuuhhahsbqrskink.apps.googleusercontent.com',
-        webClientId: '359919861567-vfiji06sornpbcg4uuuhhahsbqrskink.apps.googleusercontent.com',
+        iosClientId: Config.iosClientId,
+        webClientId: Config.iosClientId,
         offlineAccess: false,
       });
 
