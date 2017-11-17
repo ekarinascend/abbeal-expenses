@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { GoogleSigninButton } from 'react-native-google-signin';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,21 +13,89 @@ const styles = StyleSheet.create({
     width: 230,
     height: 48,
   },
+  signOutbutton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: 'lightgrey',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default class App extends React.Component {
-  signIn = () => console.log('Sign in')
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: null,
+    };
+  }
+
+  componentWillMount() {
+    this.setupGoogleSignIn();
+  }
+
+  async setupGoogleSignIn() { //eslint-disable-line
+    try {
+      await GoogleSignin.hasPlayServices({ autoResolve: true });
+      await GoogleSignin.configure({
+        iosClientId: '359919861567-vfiji06sornpbcg4uuuhhahsbqrskink.apps.googleusercontent.com',
+        webClientId: '359919861567-vfiji06sornpbcg4uuuhhahsbqrskink.apps.googleusercontent.com',
+        offlineAccess: false,
+      });
+
+      const user = await GoogleSignin.currentUserAsync();
+      console.log('Current user', user);
+      this.setState({ user });
+    } catch (err) {
+      console.log('Google signin error', err.code, err.message);
+    }
+  }
+
+  signIn = () => {
+    GoogleSignin.signIn()
+      .then((user) => {
+        console.log(user);
+        this.setState({ user });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .done();
+  }
+
+  signOut = () => {
+    GoogleSignin.revokeAccess()
+      .then(() => GoogleSignin.signOut())
+      .then(() => this.setState({ user: null }))
+      .done();
+  }
 
   render() {
+    const { user } = this.state;
+
     return (
       <View style={styles.container}>
         <Text>Abbeal Expenses</Text>
-        <GoogleSigninButton
-          style={styles.signInButton}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Auto}
-          onPress={this.signIn}
-        />
+
+        {!user &&
+          <GoogleSigninButton
+            style={styles.signInButton}
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Auto}
+            onPress={this.signIn}
+          />
+        }
+
+        {user &&
+          <View>
+            <Text>Welcome : {user.name}</Text>
+            <TouchableOpacity onPress={this.signOut}>
+              <View style={styles.signOutbutton}>
+                <Text>Log out</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        }
       </View>
     );
   }
