@@ -49,9 +49,10 @@ class SignInScreen extends Component {
 
       const user = await GoogleSignin.currentUserAsync();
       console.log('Current user', user);
-      this.setState({ user });
+      this.props.signInSuccess(user);
     } catch (err) {
       console.log('Google signin error', err.code, err.message);
+      this.props.signInError(err);
     }
   }
 
@@ -60,11 +61,10 @@ class SignInScreen extends Component {
 
     GoogleSignin.signIn()
       .then((user) => {
-        console.log(user);
-        this.setState({ user });
+        this.props.signInSuccess(user);
       })
       .catch((err) => {
-        console.log(err);
+        this.props.signInError(err);
       })
       .done();
   }
@@ -72,12 +72,12 @@ class SignInScreen extends Component {
   signOut = () => {
     GoogleSignin.revokeAccess()
       .then(() => GoogleSignin.signOut())
-      .then(() => this.setState({ user: null }))
+      .then(() => this.props.signOut())
       .done();
   }
 
   render() {
-    const { user } = this.state;
+    const { user } = this.props;
 
     return (
       <View style={styles.container}>
@@ -110,6 +110,9 @@ class SignInScreen extends Component {
 SignInScreen.propTypes = {
   user: PropTypes.object,
   signIn: PropTypes.func,
+  signInSuccess: PropTypes.func,
+  signInError: PropTypes.func,
+  signOut: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -118,6 +121,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   signIn: actions.signIn,
+  signInSuccess: actions.signInSuccess,
+  signInError: actions.signInError,
+  signOut: actions.signOut,
 };
 
 export default connect(

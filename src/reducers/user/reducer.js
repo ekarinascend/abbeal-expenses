@@ -2,25 +2,18 @@ import types from './types';
 
 const initialState = {
   currentUser: null,
+  signInError: null,
 };
 
 export default (state = initialState, action) => {
-  const { type } = action;
-  console.log('in reducer !!');
+  const { type, user, error } = action;
   switch (type) {
-    case types.SIGN_IN:
-      console.log('trigger sign in');
-      // TODO
-      // modify state here
-      return state;
-    case types.SIGN_IN_SUCCESS: {
-      console.log('sign in success');
-      return state;
-    }
-    case types.SIGN_IN_ERROR: {
-      console.log('sign in error');
-      return state;
-    }
+    case types.SIGN_IN_SUCCESS:
+      return { ...state, currentUser: user };
+    case types.SIGN_IN_ERROR:
+      return { ...state, signInError: error };
+    case types.SIGN_OUT:
+      return { ...state, currentUser: null };
     default:
       return state;
   }
