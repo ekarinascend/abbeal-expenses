@@ -17,6 +17,7 @@
     "airbnb-base"
   ],
   "rules" : {
-    "arrow-body-style": "warn"
+    "arrow-body-style": "warn",
+    "import/prefer-default-export": 0
   }
 }

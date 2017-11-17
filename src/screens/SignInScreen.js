@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 import Config from './../config';
+import actions from '../reducers/user/actions';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,7 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class App extends React.Component {
+class SignInScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,6 +56,8 @@ export default class App extends React.Component {
   }
 
   signIn = () => {
+    this.props.signIn();
+
     GoogleSignin.signIn()
       .then((user) => {
         console.log(user);
@@ -101,3 +106,21 @@ export default class App extends React.Component {
     );
   }
 }
+
+SignInScreen.propTypes = {
+  user: PropTypes.object,
+  signIn: PropTypes.func,
+};
+
+const mapStateToProps = state => ({
+  user: state.user.currentUser,
+});
+
+const mapDispatchToProps = {
+  signIn: actions.signIn,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignInScreen);
