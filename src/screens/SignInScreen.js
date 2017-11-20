@@ -27,13 +27,6 @@ const styles = StyleSheet.create({
 });
 
 class SignInScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: null,
-    };
-  }
-
   componentWillMount() {
     this.setupGoogleSignIn();
   }
@@ -48,7 +41,6 @@ class SignInScreen extends Component {
       });
 
       const user = await GoogleSignin.currentUserAsync();
-      console.log('Current user', user);
       this.props.signInSuccess(user);
     } catch (err) {
       console.log('Google signin error', err.code, err.message);
@@ -58,22 +50,10 @@ class SignInScreen extends Component {
 
   signIn = () => {
     this.props.signIn();
-
-    GoogleSignin.signIn()
-      .then((user) => {
-        this.props.signInSuccess(user);
-      })
-      .catch((err) => {
-        this.props.signInError(err);
-      })
-      .done();
   }
 
   signOut = () => {
-    GoogleSignin.revokeAccess()
-      .then(() => GoogleSignin.signOut())
-      .then(() => this.props.signOut())
-      .done();
+    this.props.signOut();
   }
 
   render() {
@@ -95,7 +75,7 @@ class SignInScreen extends Component {
         {user &&
           <View>
             <Text>Welcome : {user.name}</Text>
-            <TouchableOpacity onPress={this.signOut}>
+            <TouchableOpacity onPress={() => this.signOut()}>
               <View style={styles.signOutbutton}>
                 <Text>Log out</Text>
               </View>
