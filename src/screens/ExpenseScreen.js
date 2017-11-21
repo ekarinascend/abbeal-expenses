@@ -1,8 +1,22 @@
 import React from 'react';
-import { Text } from 'react-native';
+import PropTypes from 'prop-types';
+import { Text, View, StyleSheet } from 'react-native';
 
-const ExpenseScreen = () => (
-  <Text>EXPENSE DETAILS</Text>
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
+
+const ExpenseScreen = ({ item }) => (
+  <View style={styles.container}>
+    <Text>EXPENSE DETAILS</Text>
+    <Text>{item.title}</Text>
+  </View>
 );
+
+ExpenseScreen.propTypes = {
+  item: PropTypes.object,
+};
 
 export default ExpenseScreen;

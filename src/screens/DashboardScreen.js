@@ -23,7 +23,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const DashboardScreen = ({ user, expenses, signOut }) => (
+const DashboardScreen = ({
+  user,
+  expenses,
+  signOut,
+  navigator,
+}) => (
   <View style={styles.container}>
     <View style={styles.buttonContainer}>
       {user && <Text>Welcome : {user.name}</Text>}
@@ -36,7 +41,18 @@ const DashboardScreen = ({ user, expenses, signOut }) => (
 
     <FlatList
       data={expenses}
-      renderItem={({ item }) => <ListItem {...item} />}
+      keyExtractor={item => item.id}
+      renderItem={({ item }) => (
+        <ListItem
+          {...item}
+          onPress={() => {
+            navigator.push({
+              screen: 'ExpenseScreen',
+              passProps: { item },
+            });
+          }}
+        />
+      )}
     />
   </View>
 );
@@ -45,6 +61,7 @@ DashboardScreen.propTypes = {
   user: PropTypes.object,
   expenses: PropTypes.array,
   signOut: PropTypes.func,
+  navigator: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
