@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
+import ActionButton from 'react-native-action-button';
 import actions from '../reducers/user/actions';
 import ListItem from '../components/ListItem';
 
@@ -53,6 +54,11 @@ const DashboardScreen = ({
           }}
         />
       )}
+    />
+
+    <ActionButton
+      buttonColor="rgba(201, 201, 201, 1)"
+      onPress={() => console.log('action button pressed !') }
     />
   </View>
 );

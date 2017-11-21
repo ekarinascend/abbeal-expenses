@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "359919861567",
+    "project_id": "abbeal-expense-186310"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359919861567:android:e3ab8108d52e1ef2",
+        "android_client_info": {
+          "package_name": "com.abbealexpenses"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "359919861567-107jmfbv950ke551dap7folvhr3javs9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abbealexpenses",
+            "certificate_hash": "b13ac8d7170ceff94f76ae1a5940df473b2ffcb0"
+          }
+        },
+        {
+          "client_id": "359919861567-vu80sokfklorp37tf8258m27vsgtm7t9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi8TO21Q07PgtppL5CQLhtPforsRaCj2o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
