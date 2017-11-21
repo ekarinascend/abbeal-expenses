@@ -22,6 +22,20 @@ const startApp = () => {
     screen: {
       screen: 'DashboardScreen',
       title: 'ABBEAL',
+      navigatorButtons: {
+        leftButtons: [
+          {
+            id: 'avatar',
+            component: 'NavbarAvatar',
+          },
+        ],
+        rightButtons: [
+          {
+            id: 'logout-button',
+            component: 'LogoutButton',
+          },
+        ],
+      },
     },
   });
 };
@@ -38,6 +52,7 @@ const setupGoogleSignIn = async function setupGoogleSignIn() {
     const user = await GoogleSignin.currentUserAsync();
     return user;
   } catch (err) {
+    // eslint-disable-next-line
     console.log('Google signin error', err.code, err.message);
     return null;
   }
@@ -67,6 +82,8 @@ export default function* sagas() {
     if (!user) {
       user = yield call(signInSaga);
     }
+
+    console.log(user.photo);
 
     yield call(appSaga);
   }
