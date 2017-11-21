@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
-import Config from './../config';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import { GoogleSigninButton } from 'react-native-google-signin';
 import actions from '../reducers/user/actions';
 
 const styles = StyleSheet.create({
@@ -17,82 +16,30 @@ const styles = StyleSheet.create({
     width: 230,
     height: 48,
   },
-  signOutbutton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: 'lightgrey',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 });
 
-class SignInScreen extends Component {
-  componentWillMount() {
-    this.setupGoogleSignIn();
-  }
-
-  async setupGoogleSignIn() { //eslint-disable-line
-    try {
-      await GoogleSignin.hasPlayServices({ autoResolve: true });
-      await GoogleSignin.configure({
-        iosClientId: Config.iosClientId,
-        webClientId: Config.iosClientId,
-        offlineAccess: false,
-      });
-
-      const user = await GoogleSignin.currentUserAsync();
-      this.props.signInSuccess(user);
-    } catch (err) {
-      console.log('Google signin error', err.code, err.message);
-      this.props.signInError(err);
+const SignInScreen = ({ user, signIn }) => (
+  <View style={styles.container}>
+    {!user &&
+      <GoogleSigninButton
+        style={styles.signInButton}
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Auto}
+        onPress={signIn}
+      />
     }
-  }
-
-  signIn = () => {
-    this.props.signIn();
-  }
-
-  signOut = () => {
-    this.props.signOut();
-  }
-
-  render() {
-    const { user } = this.props;
-
-    return (
-      <View style={styles.container}>
-        <Text>Abbeal Expenses</Text>
-
-        {!user &&
-          <GoogleSigninButton
-            style={styles.signInButton}
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Auto}
-            onPress={this.signIn}
-          />
-        }
-
-        {user &&
-          <View>
-            <Text>Welcome : {user.name}</Text>
-            <TouchableOpacity onPress={() => this.signOut()}>
-              <View style={styles.signOutbutton}>
-                <Text>Log out</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        }
-      </View>
-    );
-  }
-}
+    {user &&
+      <ActivityIndicator
+        animating={true}
+        size={'large'}
+      />
+    }
+  </View>
+);
 
 SignInScreen.propTypes = {
   user: PropTypes.object,
   signIn: PropTypes.func,
-  signInSuccess: PropTypes.func,
-  signInError: PropTypes.func,
-  signOut: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -101,9 +48,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   signIn: actions.signIn,
-  signInSuccess: actions.signInSuccess,
-  signInError: actions.signInError,
-  signOut: actions.signOut,
 };
 
 export default connect(

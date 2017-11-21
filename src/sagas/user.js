@@ -1,4 +1,4 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { take, call, put } from 'redux-saga/effects';
 import { GoogleSignin } from 'react-native-google-signin';
 import types from '../reducers/user/types';
 import actions from '../reducers/user/actions';
@@ -6,9 +6,10 @@ import actions from '../reducers/user/actions';
 const signIn = function* signIn() {
   try {
     const user = yield call([GoogleSignin, GoogleSignin.signIn]);
-    yield put(actions.signInSuccess(user));
+    return yield put(actions.signInSuccess(user));
   } catch (error) {
     yield put(actions.signInError(error));
+    return null;
   }
 };
 
@@ -17,18 +18,21 @@ const signOut = function* signOut() {
 };
 
 const watchSignIn = function* signInDriver() {
-  yield takeLatest(types.SIGN_IN, signIn);
+  while (true) {
+    yield take(types.SIGN_IN);
+    const user = yield call(signIn);
+    if (user) return user;
+  }
 };
 
 const watchSignOut = function* signOutDriver() {
-  yield takeLatest(types.SIGN_OUT, signOut);
+  while (true) {
+    yield take(types.SIGN_OUT);
+    return yield call(signOut);
+  }
 };
 
-const rootSaga = function* rootSaga() {
-  yield all([
-    call(watchSignIn),
-    call(watchSignOut),
-  ]);
+export {
+  watchSignIn,
+  watchSignOut,
 };
-
-export default rootSaga;
