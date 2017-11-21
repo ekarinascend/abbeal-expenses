@@ -1,15 +1,18 @@
 import { Navigation } from 'react-native-navigation';
-import { call } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import { GoogleSignin } from 'react-native-google-signin';
 import { watchSignIn, watchSignOut } from './user';
+import actions from '../reducers/user/actions';
 import Config from './../config';
 
 const showSignInScreen = () => {
   Navigation.startSingleScreenApp({
     screen: {
       screen: 'SignInScreen',
-      title: 'Abbeal Expenses Sign In',
+      navigatorStyle: {
+        navBarHidden: true,
+      },
     },
   });
 };
@@ -18,7 +21,7 @@ const startApp = () => {
   Navigation.startSingleScreenApp({
     screen: {
       screen: 'DashboardScreen',
-      title: 'Abbeal Expenses',
+      title: 'ABBEAL',
     },
   });
 };
@@ -42,6 +45,7 @@ const setupGoogleSignIn = async function setupGoogleSignIn() {
 
 const getSessionSaga = function* getSession() {
   const user = yield call(setupGoogleSignIn);
+  yield put(actions.signInSuccess(user));
   return user;
 };
 
