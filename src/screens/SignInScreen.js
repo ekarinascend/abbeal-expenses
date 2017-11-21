@@ -1,25 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, Image } from 'react-native';
 import { GoogleSigninButton } from 'react-native-google-signin';
 import actions from '../reducers/user/actions';
+import LogoImg from '../assets/images/sign-in-logo.png';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#2e2e2c',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   signInButton: {
-    width: 230,
-    height: 48,
+    width: '90%',
+    height: 60,
+    marginTop: '10%',
+  },
+  logo: {
+    marginTop: '20%',
+    width: '50%',
+    resizeMode: 'contain',
   },
 });
 
 const SignInScreen = ({ user, signIn }) => (
   <View style={styles.container}>
+    <Image source={LogoImg} style={styles.logo} />
     {!user &&
       <GoogleSigninButton
         style={styles.signInButton}
