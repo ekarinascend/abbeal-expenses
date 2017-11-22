@@ -74,10 +74,17 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     entryFile: "index.js"
+
+]
+project.ext.envConfigFiles = [
+    debug: ".env",
+    release: ".env.production",
+    anycustombuildlowercase: ".env",
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply from: "../../node_modules/react-native-config/android/dotenv.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
