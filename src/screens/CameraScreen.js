@@ -1,6 +1,8 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import PropTypes from 'prop-types';
 import Camera from 'react-native-camera';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const styles = StyleSheet.create({
   container: {
@@ -12,20 +14,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    color: '#000',
-    padding: 10,
-    margin: 40,
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontSize: 45,
+    marginBottom: 30,
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    shadowOffset: { height: 3, width: 0 },
+    shadowColor: 'black',
   },
 });
 
-const CameraScreen = () => {
+const CameraScreen = ({ navigator }) => {
   const takePicture = () => (
     this.camera.capture()
       .then(data => console.log(data))
       .catch(err => console.error(err))
+      .finally(() => navigator.popToRoot())
   );
 
   return (
@@ -37,15 +42,19 @@ const CameraScreen = () => {
         style={styles.preview}
         aspect={Camera.constants.Aspect.fill}
       >
-        <Text
-          style={styles.capture}
-          onPress={takePicture}
-        >
-          [CAPTURE]
-        </Text>
+        <TouchableOpacity onPress={takePicture}>
+          <Icon
+            name="camera"
+            style={styles.capture}
+          />
+        </TouchableOpacity>
       </Camera>
     </View>
   );
+};
+
+CameraScreen.propTypes = {
+  navigator: PropTypes.object,
 };
 
 export default CameraScreen;
