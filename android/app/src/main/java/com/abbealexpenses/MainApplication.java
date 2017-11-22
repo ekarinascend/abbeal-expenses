@@ -3,6 +3,7 @@ package com.abbealexpenses;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.reactnativenavigation.NavigationReactPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RCTCameraPackage(),
             new NavigationReactPackage(),
             new ReactNativeConfigPackage(),
             new RNGoogleSigninPackage()

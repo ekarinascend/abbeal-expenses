@@ -35,7 +35,14 @@ const DashboardScreen = ({
 
     <ActionButton
       buttonColor="rgba(201, 201, 201, 1)"
-      onPress={() => console.log('action button pressed !') }
+      onPress={() => {
+        navigator.push({
+          screen: 'CameraScreen',
+          navigatorStyle: {
+            navBarHidden: true,
+          },
+        });
+      }}
     />
   </View>
 );

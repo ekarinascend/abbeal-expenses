@@ -78,13 +78,7 @@ const appSaga = function* appSaga() {
 export default function* sagas() {
   while (true) {
     let user = yield call(getSessionSaga);
-
-    if (!user) {
-      user = yield call(signInSaga);
-    }
-
-    console.log(user.photo);
-
+    if (!user) user = yield call(signInSaga);
     yield call(appSaga);
   }
 }
