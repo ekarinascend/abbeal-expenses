@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { View, StyleSheet, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import ActionButton from 'react-native-action-button';
-import actions from '../reducers/user/actions';
+import actions from '../reducers/expenses/actions';
 import ListItem from '../components/ListItem';
 
 const styles = StyleSheet.create({
@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
 const DashboardScreen = ({
   expenses,
   navigator,
+  uploadFile,
 }) => (
   <View style={styles.container}>
     <FlatList
@@ -38,6 +39,7 @@ const DashboardScreen = ({
       onPress={() => {
         navigator.push({
           screen: 'CameraScreen',
+          passProps: { uploadFile },
           navigatorStyle: {
             navBarHidden: true,
           },
@@ -49,8 +51,8 @@ const DashboardScreen = ({
 
 DashboardScreen.propTypes = {
   expenses: PropTypes.array,
-  signOut: PropTypes.func,
   navigator: PropTypes.object,
+  uploadFile: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -58,7 +60,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  signOut: actions.signOut,
+  uploadFile: actions.uploadFile,
 };
 
 export default connect(

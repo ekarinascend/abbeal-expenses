@@ -25,10 +25,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const CameraScreen = ({ navigator }) => {
+const CameraScreen = ({ navigator, uploadFile }) => {
   const takePicture = () => (
     this.camera.capture()
-      .then(data => console.log(data))
+      .then(data => uploadFile(data.path))
       .catch(err => console.error(err))
       .finally(() => navigator.popToRoot())
   );
@@ -41,6 +41,7 @@ const CameraScreen = ({ navigator }) => {
         }}
         style={styles.preview}
         aspect={Camera.constants.Aspect.fill}
+        captureTarget={Camera.constants.CaptureTarget.disk}
       >
         <TouchableOpacity onPress={takePicture}>
           <Icon
@@ -55,6 +56,7 @@ const CameraScreen = ({ navigator }) => {
 
 CameraScreen.propTypes = {
   navigator: PropTypes.object,
+  uploadFile: PropTypes.func,
 };
 
 export default CameraScreen;

@@ -3,6 +3,7 @@ package com.abbealexpenses;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 // import com.reactnativenavigation.NavigationReactPackage;
 import com.reactnativenavigation.NavigationApplication;
@@ -12,6 +13,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.rnfs.RNFSPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,11 +30,13 @@ public class MainApplication extends NavigationApplication {
       // No need to add RnnPackage and MainReactPackage
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new RNFSPackage(),
           // new NavigationReactPackage(),
           new ReactNativeConfigPackage(),
           new RNGoogleSigninPackage(),
           // new VectorIconsPackage(),
-          new RCTCameraPackage()
+          new RCTCameraPackage(),
+          new RNFSPackage()
       );
   }
 

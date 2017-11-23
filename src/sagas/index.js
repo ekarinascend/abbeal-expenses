@@ -1,8 +1,9 @@
 import { Navigation } from 'react-native-navigation';
-import { call, put } from 'redux-saga/effects';
+import { call, put, spawn } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import { GoogleSignin } from 'react-native-google-signin';
 import { watchSignIn, watchSignOut } from './user';
+import expense from './expense';
 import actions from '../reducers/user/actions';
 import Config from './../config';
 
@@ -47,6 +48,7 @@ const setupGoogleSignIn = async function setupGoogleSignIn() {
       iosClientId: Config.iosClientId,
       webClientId: Config.iosClientId,
       offlineAccess: false,
+      scopes: ['https://www.googleapis.com/auth/drive.file'],
     });
 
     const user = await GoogleSignin.currentUserAsync();
@@ -72,6 +74,7 @@ const signInSaga = function* signInSaga() {
 const appSaga = function* appSaga() {
   yield call(delay, 500);
   yield call(startApp);
+  yield spawn(expense);
   return yield call(watchSignOut);
 };
 

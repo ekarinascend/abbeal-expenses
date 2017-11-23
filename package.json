@@ -31,6 +31,7 @@
     "react-native-action-button": "^2.8.2",
     "react-native-camera": "^0.12.0",
     "react-native-config": "^0.10.0",
+    "react-native-fs": "^2.8.5",
     "react-native-google-signin": "^0.12.0",
     "react-native-navigation": "^1.1.280",
     "react-native-vector-icons": "^4.4.2",
