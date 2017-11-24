@@ -1,18 +1,15 @@
 'use strict';
-const GoogleUser = /** @class */ (function () {
-    function GoogleUser(receivedGUser) {
-        this.accessToken = receivedGUser.accessToken;
-        this.accessTokenExpirationDate = receivedGUser.accessTokenExpirationDate;
-        this.email = receivedGUser.email;
-        this.familyName = receivedGUser.familyName;
-        this.givenName = receivedGUser.givenName;
-        this.id = receivedGUser.id;
-        this.idToken = receivedGUser.idToken;
-        this.name = receivedGUser.name;
-        this.photo = receivedGUser.photo;
-        this.serverAuthCode = receivedGUser.serverAuthCode;
+export default class GoogleUser {
+    constructor({accessToken, accessTokenExpirationDate, email, familyName, givenName, id, idToken, name, photo, serverAuthCode}) {
+        this.accessToken = accessToken;
+        this.accessTokenExpirationDate = accessTokenExpirationDate;
+        this.email = email;
+        this.familyName = familyName;
+        this.givenName = givenName;
+        this.id = id;
+        this.idToken = idToken;
+        this.name = name;
+        this.photo = photo;
+        this.serverAuthCode = serverAuthCode;
     }
-    return GoogleUser;
-}());
-
-export default GoogleUser;
+}
