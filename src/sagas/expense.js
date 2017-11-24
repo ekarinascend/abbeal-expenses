@@ -2,7 +2,9 @@ import {call, put, takeLatest, all, select} from 'redux-saga/effects';
 import types from '../reducers/expenses/types';
 import actions from '../reducers/expenses/actions';
 import GoogleApi from '../google';
+import googleDriveService from '../services/GoogleDriveService';
 
+const getCurrentUser = state => state.user.currentUser;
 const getCurrentUserToken = state => state.user.currentUser.accessToken;
 
 const uploadToDrive = function* uploadToDrive(action) {
@@ -17,26 +19,34 @@ const uploadToDrive = function* uploadToDrive(action) {
 };
 
 const fetchExpenses = function* fetchExpenses(action) {
-    console.log('GET : fetch Api');
-    const seedExpenses = [
-        {
-            id: 1,
-            type: 'food',
-            date: new Date(),
-            title: 'Restaurant italien',
-            price_ttc: 25,
-            vat: 5,
-        },
-        {
-            id: 2,
-            type: 'transport',
-            date: new Date(),
-            title: 'Carte TCL',
-            price_ttc: 65,
-            vat: 19,
-        },
-    ];
-    yield put(actions.fetchExpensesSuccess(seedExpenses));
+    try {
+        googleDriveService.user = yield select(getCurrentUser);
+        let expenses = yield call(googleDriveService.getContent);
+        // todo : trigger fetchExpensesSuccess action with a parsed response
+        // todo : remove next expenses affectation
+        expenses = [
+            {
+                id: 1,
+                type: 'food',
+                date: new Date(),
+                title: 'Restaurant italien',
+                price_ttc: 25,
+                vat: 5,
+            },
+            {
+                id: 2,
+                type: 'transport',
+                date: new Date(),
+                title: 'Carte TCL',
+                price_ttc: 65,
+                vat: 19,
+            },
+        ];
+
+        yield put(actions.fetchExpensesSuccess(expenses));
+    } catch (error) {
+        yield put(actions.fetchExpensesError(error));
+    }
 }
 const watchUploadToDrive = function* watchUploadToDrive() {
     yield takeLatest(types.UPLOAD_FILE, uploadToDrive);
