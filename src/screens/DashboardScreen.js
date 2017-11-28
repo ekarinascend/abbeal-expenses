@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
@@ -12,47 +12,54 @@ const styles = StyleSheet.create({
   },
 });
 
-const DashboardScreen = ({
-  expenses,
-  navigator,
-  uploadFile,
-}) => (
-  <View style={styles.container}>
-    <FlatList
-      data={expenses}
-      keyExtractor={item => item.id}
-      renderItem={({ item }) => (
-        <ListItem
-          {...item}
+class DashboardScreen extends Component {
+  render() {
+    const { expenses, navigator, uploadFile } = this.props;
+
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={expenses}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <ListItem
+              {...item}
+              onPress={() => {
+                navigator.push({
+                  screen: 'ExpenseScreen',
+                  passProps: { item },
+                });
+              }}
+            />
+          )}
+        />
+
+        <ActionButton
+          buttonColor="rgba(201, 201, 201, 1)"
           onPress={() => {
             navigator.push({
-              screen: 'ExpenseScreen',
-              passProps: { item },
+              screen: 'CameraScreen',
+              passProps: { uploadFile },
+              navigatorStyle: {
+                navBarHidden: true,
+              },
             });
           }}
         />
-      )}
-    />
+      </View>
+    );
+  }
 
-    <ActionButton
-      buttonColor="rgba(201, 201, 201, 1)"
-      onPress={() => {
-        navigator.push({
-          screen: 'CameraScreen',
-          passProps: { uploadFile },
-          navigatorStyle: {
-            navBarHidden: true,
-          },
-        });
-      }}
-    />
-  </View>
-);
+  componentDidMount() {
+    this.props.fetchExpenses();
+  }
+}
 
 DashboardScreen.propTypes = {
   expenses: PropTypes.array,
   navigator: PropTypes.object,
   uploadFile: PropTypes.func,
+  fetchExpenses: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -61,6 +68,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   uploadFile: actions.uploadFile,
+  fetchExpenses: actions.fetchExpenses,
 };
 
 export default connect(

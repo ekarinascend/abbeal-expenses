@@ -48,7 +48,10 @@ const setupGoogleSignIn = async function setupGoogleSignIn() {
       iosClientId: Config.iosClientId,
       webClientId: Config.iosClientId,
       offlineAccess: false,
-      scopes: ['https://www.googleapis.com/auth/drive.file'],
+      scopes: [
+        'https://www.googleapis.com/auth/drive',
+        'https://www.googleapis.com/auth/drive.file',
+      ],
     });
 
     const user = await GoogleSignin.currentUserAsync();
