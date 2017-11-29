@@ -41,7 +41,7 @@ const CameraScreen = ({ navigator, uploadFile }) => {
         }}
         style={styles.preview}
         aspect={Camera.constants.Aspect.fill}
-        captureTarget={Camera.constants.CaptureTarget.disk}
+        captureTarget={Camera.constants.CaptureTarget.temp}
       >
         <TouchableOpacity onPress={takePicture}>
           <Icon

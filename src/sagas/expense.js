@@ -1,8 +1,7 @@
 import { call, put, takeLatest, all, select } from 'redux-saga/effects';
 import types from '../reducers/expenses/types';
 import actions from '../reducers/expenses/actions';
-import GoogleApi from '../google';
-import googleDriveService from '../services/GoogleDriveService';
+import { uploadFile } from '../google-api';
 
 const seedExpenses = [
   {
@@ -24,14 +23,15 @@ const seedExpenses = [
 ];
 
 const getCurrentUser = state => state.user.currentUser;
-const getCurrentUserToken = state => state.user.currentUser.accessToken;
+const getCurrentUserToken = state => getCurrentUser(state).accessToken;
 
 const uploadToDrive = function* uploadToDrive(action) {
   try {
     const token = yield select(getCurrentUserToken);
-    const api = new GoogleApi(token);
-    const url = yield call(api.uploadFile, action.path);
-    yield put(actions.uploadFileSuccess(url));
+    const file = yield call(uploadFile, token, action.path);
+    console.log(file);
+
+    yield put(actions.uploadFileSuccess(file));
   } catch (error) {
     yield put(actions.uploadFileError(error));
   }
@@ -39,11 +39,9 @@ const uploadToDrive = function* uploadToDrive(action) {
 
 const fetchExpenses = function* fetchExpenses() {
   try {
-    googleDriveService.user = yield select(getCurrentUser);
-    let expenses = yield call(googleDriveService.getContent);
-    expenses = seedExpenses;
-
-    yield put(actions.fetchExpensesSuccess(expenses));
+    // TODO
+    // fetch expenses from spreadsheet
+    yield put(actions.fetchExpensesSuccess(seedExpenses));
   } catch (error) {
     yield put(actions.fetchExpensesError(error));
   }

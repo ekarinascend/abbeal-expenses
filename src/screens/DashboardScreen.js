@@ -13,6 +13,10 @@ const styles = StyleSheet.create({
 });
 
 class DashboardScreen extends Component {
+  componentDidMount() {
+    this.props.fetchExpenses();
+  }
+
   render() {
     const { expenses, navigator, uploadFile } = this.props;
 
@@ -48,10 +52,6 @@ class DashboardScreen extends Component {
         />
       </View>
     );
-  }
-
-  componentDidMount() {
-    this.props.fetchExpenses();
   }
 }
 
