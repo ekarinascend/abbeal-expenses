@@ -25,13 +25,25 @@ const styles = StyleSheet.create({
   },
 });
 
-const CameraScreen = ({ navigator, uploadFile }) => {
-  const takePicture = () => (
-    this.camera.capture()
-      .then(data => uploadFile(data.path))
-      .catch(err => console.error(err))
-      .finally(() => navigator.popToRoot())
-  );
+async function capture() {
+  const image = await this.camera.capture();
+  return image.path;
+}
+
+const CameraScreen = ({ navigator, newPicture }) => {
+  const takePicture = () => {
+    capture().then((path) => {
+      newPicture(path);
+      navigator.push({
+        screen: 'PhotoConfirmationScreen',
+        passProps: { path },
+        animated: false,
+        navigatorStyle: {
+          navBarHidden: true,
+        },
+      });
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -56,7 +68,7 @@ const CameraScreen = ({ navigator, uploadFile }) => {
 
 CameraScreen.propTypes = {
   navigator: PropTypes.object,
-  uploadFile: PropTypes.func,
+  newPicture: PropTypes.func,
 };
 
 export default CameraScreen;

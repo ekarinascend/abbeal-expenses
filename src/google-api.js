@@ -1,8 +1,9 @@
-import { readFile } from 'react-native-fs';
+import Config from './config';
 
-const DRIVE_URL = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+const GDriveUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+const GVisionUrl = 'https://vision.googleapis.com/v1/images:annotate';
 
-async function uploadFile(token, path) {
+async function uploadFile(token, { path, base64 }) {
   const boundary = 'abbeal_expense';
   const delimiter = `--${boundary}`;
   const closeDelimiter = `--${boundary}--`;
@@ -15,7 +16,6 @@ async function uploadFile(token, path) {
     parents: ['0BxQIvF6inc-6c2tXZW5FUUROdFE'],
   };
 
-  const base64Data = await readFile(path, 'base64');
   const body = `
 ${delimiter}
 Content-Type: application/json; charset=UTF-8\n
@@ -23,11 +23,11 @@ ${JSON.stringify(metadata)}
 ${delimiter}
 Content-Type: ${contentType}
 Content-Transfer-Encoding: base64\n
-${base64Data}
+${base64}
 ${closeDelimiter}
 `;
 
-  const response = await fetch(DRIVE_URL, {
+  const response = await fetch(GDriveUrl, {
     body,
     method: 'POST',
     headers: new Headers({
@@ -45,8 +45,33 @@ ${closeDelimiter}
   throw new Error(json.error.message);
 }
 
-async function ocrFile(token, id) {
-  console.log(id);
+async function ocrFile(content) {
+  const body = JSON.stringify({
+    requests: [
+      {
+        image: { content },
+        features: [
+          { type: 'DOCUMENT_TEXT_DETECTION' },
+        ],
+      },
+    ],
+  });
+
+  const response = await fetch(GVisionUrl, {
+    body,
+    method: 'POST',
+    headers: new Headers({
+      Authorization: `Bearer ${Config.visionApiToken}`,
+      'Content-Type': 'application/json',
+    }),
+  });
+
+  const json = await response.json();
+  if (response.ok) {
+    return json;
+  }
+
+  throw new Error(json.error.message);
 }
 
 export {

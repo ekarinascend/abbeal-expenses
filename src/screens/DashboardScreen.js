@@ -18,7 +18,7 @@ class DashboardScreen extends Component {
   }
 
   render() {
-    const { expenses, navigator, uploadFile } = this.props;
+    const { expenses, navigator, newPicture } = this.props;
 
     return (
       <View style={styles.container}>
@@ -43,7 +43,7 @@ class DashboardScreen extends Component {
           onPress={() => {
             navigator.push({
               screen: 'CameraScreen',
-              passProps: { uploadFile },
+              passProps: { newPicture },
               navigatorStyle: {
                 navBarHidden: true,
               },
@@ -58,7 +58,7 @@ class DashboardScreen extends Component {
 DashboardScreen.propTypes = {
   expenses: PropTypes.array,
   navigator: PropTypes.object,
-  uploadFile: PropTypes.func,
+  newPicture: PropTypes.func,
   fetchExpenses: PropTypes.func,
 };
 
@@ -67,7 +67,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  uploadFile: actions.uploadFile,
+  newPicture: actions.newPicture,
   fetchExpenses: actions.fetchExpenses,
 };
 

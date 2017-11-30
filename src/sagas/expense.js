@@ -1,7 +1,8 @@
 import { call, put, takeLatest, all, select } from 'redux-saga/effects';
 import types from '../reducers/expenses/types';
 import actions from '../reducers/expenses/actions';
-import { uploadFile } from '../google-api';
+import { uploadFile, ocrFile } from '../google-api';
+import { readFileAsBase64 } from '../utils';
 
 const seedExpenses = [
   {
@@ -24,17 +25,11 @@ const seedExpenses = [
 
 const getCurrentUser = state => state.user.currentUser;
 const getCurrentUserToken = state => getCurrentUser(state).accessToken;
+const getPicture = state => state.expenses.picture;
 
-const uploadToDrive = function* uploadToDrive(action) {
-  try {
-    const token = yield select(getCurrentUserToken);
-    const file = yield call(uploadFile, token, action.path);
-    console.log(file);
-
-    yield put(actions.uploadFileSuccess(file));
-  } catch (error) {
-    yield put(actions.uploadFileError(error));
-  }
+const fileToBase64 = function* fileToBase64(path) {
+  const base64 = yield call(readFileAsBase64, path);
+  return base64;
 };
 
 const fetchExpenses = function* fetchExpenses() {
@@ -47,19 +42,49 @@ const fetchExpenses = function* fetchExpenses() {
   }
 };
 
+const newPicture = function* newPicture(action) {
+  const { path } = action;
+
+  const base64 = yield call(fileToBase64, path);
+  yield put(actions.setPictureBase64(base64));
+};
+
+const uploadToDrive = function* uploadToDrive(token, picture) {
+  try {
+    yield put(actions.uploadFile());
+    const file = yield call(uploadFile, token, picture);
+    const ocr = yield call(ocrFile, picture.base64);
+    console.log(ocr);
+
+    yield put(actions.uploadFileSuccess(file.id));
+  } catch (error) {
+    yield put(actions.uploadFileError(error));
+  }
+};
+
+const confirmPicture = function* confirmPicture() {
+  const token = yield select(getCurrentUserToken);
+  const picture = yield select(getPicture);
+  yield call(uploadToDrive, token, picture);
+};
+
 const watchFetchExpenses = function* watchFetchExpenses() {
   yield takeLatest(types.FETCH_EXPENSES, fetchExpenses);
 };
 
-const watchUploadToDrive = function* watchUploadToDrive() {
-  yield takeLatest(types.UPLOAD_FILE, uploadToDrive);
+const watchNewPicture = function* watchNewPicture() {
+  yield takeLatest(types.NEW_PICTURE, newPicture);
+};
+
+const watchConfirmPicture = function* watchConfirmPicture() {
+  yield takeLatest(types.CONFIRM_PICTURE, confirmPicture);
 };
 
 const rootSaga = function* rootSaga() {
   yield all([
-    // TODO add more watchers
     call(watchFetchExpenses),
-    call(watchUploadToDrive),
+    call(watchNewPicture),
+    call(watchConfirmPicture),
   ]);
 };
 
