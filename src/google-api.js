@@ -51,7 +51,7 @@ async function ocrFile(content) {
       {
         image: { content },
         features: [
-          { type: 'DOCUMENT_TEXT_DETECTION' },
+          { type: 'TEXT_DETECTION' },
         ],
       },
     ],

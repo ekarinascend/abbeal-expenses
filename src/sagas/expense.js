@@ -56,6 +56,9 @@ const uploadToDrive = function* uploadToDrive(token, picture) {
     const ocr = yield call(ocrFile, picture.base64);
     console.log(ocr);
 
+    // console.log(ocr.responses[0].fullTextAnnotation)
+    // /tva?\s+([0-9]+(\.|,[0-9]{1,2})?)/
+
     yield put(actions.uploadFileSuccess(file.id));
   } catch (error) {
     yield put(actions.uploadFileError(error));
